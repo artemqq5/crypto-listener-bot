@@ -1,16 +1,80 @@
-# This is a sample Python script.
+import asyncio
+import logging
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from aiogram import Dispatcher, Bot
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import Update, CallbackQuery
+from aiogram_i18n import I18nMiddleware, I18nContext
+from aiogram_i18n.cores import FluentRuntimeCore
+from fastapi import FastAPI
+
+import config
+from domain.handlers.user import main_user
+from domain.middleware.AdminModeMiddleware import AdminModeMiddleware
+from domain.middleware.IsRegisteredMiddleware import IsUserRegisteredMiddleware
+from domain.middleware.LocaleManager import LocaleManager
+from domain.use_cases.UpdateTaskTracking import UpdateTaskTracking
+
+storage = MemoryStorage()
+dp = Dispatcher(storage=storage)
+
+dp.include_routers(
+    main_user.router
+)
+
+default_properties = DefaultBotProperties(parse_mode=ParseMode.HTML)
+bot = Bot(token=config.BOT_TOKEN, default=default_properties, timeout=60)
+
+app = FastAPI()
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+@app.on_event("startup")
+async def on_startup():
+    await main()
+
+    await bot.delete_webhook()
+
+    # webhook_info = await bot.get_webhook_info()
+    # if webhook_info.url != config.WEBHOOK_BASE_URL + config.WEBHOOK_PATH:
+    await bot.set_webhook(url=config.WEBHOOK_BASE_URL + config.WEBHOOK_PATH, drop_pending_updates=True)
+    asyncio.create_task(UpdateTaskTracking.start_all_checks())
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@app.on_event("shutdown")
+async def on_shutdown():
+    await bot.session.close()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+@app.post(config.WEBHOOK_PATH)
+async def receive_update(data: dict):
+    update = Update.model_validate(data, context={"bot": bot})
+    await dp.feed_update(bot, update)
+    return {"ok": True}
+
+
+async def main():
+    # logs
+    logging.basicConfig(level=logging.INFO)
+
+    # localization middleware
+    i18n_middleware = I18nMiddleware(
+        core=FluentRuntimeCore(path="presentation/locales"),  # Використовуємо абсолютний шлях
+        default_locale='en',
+        manager=LocaleManager()
+    )
+
+    i18n_middleware.setup(dp)
+    await i18n_middleware.core.startup()
+
+    with i18n_middleware.use_context(locale="en") as i18n_context:
+        UpdateTaskTracking.initialize(bot=bot, i18n=i18n_context)
+
+    dp.message.outer_middleware(IsUserRegisteredMiddleware())  # check if user not registered
+    dp.callback_query.outer_middleware(IsUserRegisteredMiddleware())  # check if user not registered
+
+    dp.message.outer_middleware(AdminModeMiddleware())
+    dp.callback_query.outer_middleware(AdminModeMiddleware())
+
