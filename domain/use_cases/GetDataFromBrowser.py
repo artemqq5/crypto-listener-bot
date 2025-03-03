@@ -1,54 +1,46 @@
 import logging
-
 import requests
-from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
+class GetDataFromBinance:
+    BASE_URL = "https://api.binance.com/api/v3/ticker/price"
 
-class GetDataFromBrowser:
-    def __init__(self, url_or_coin):
-        self.url = self.normalize_url(url_or_coin)
-        self.coin_name = self.extract_coin_name(self.url)
-        self.soup = None
+    def __init__(self, input_data):
+        """Приймає або URL, або символ монети (у будь-якому регістрі)."""
+        self.coinname = self.extract_coin_name(input_data)
+        self.symbol = f"{self.coinname.upper()}USDT"  # Binance використовує пари, напр. BTCUSDT
 
-    def normalize_url(self, input_data):
-        """Перевіряє, чи є введені дані посиланням, і приводить його до правильного формату."""
-        if input_data.startswith("https"):
-            return input_data
-        return f"https://www.binance.com/en/price/{input_data.lower()}"
-
-    def extract_coin_name(self, url):
-        """Витягує назву монети з URL."""
-        parsed_url = urlparse(url)
-        return parsed_url.path.split("/")[-1].lower()
-
-    def fetch_page(self):
-        """Завантажує HTML-сторінку."""
-        response = requests.get(self.url, headers={"User-Agent": "Mozilla/5.0"})
-        if response.status_code == 200:
-            self.soup = BeautifulSoup(response.text, 'html.parser')
+    def extract_coin_name(self, input_data):
+        """Якщо введено URL – витягує назву монети, якщо символ – повертає його."""
+        if input_data.startswith("http"):
+            parsed_url = urlparse(input_data)
+            coin_name = parsed_url.path.split("/")[-1]  # Отримуємо останню частину шляху
         else:
-            raise Exception(f"Помилка при завантаженні сторінки: {response.status_code}")
+            coin_name = input_data  # Якщо не URL, просто використовуємо введене значення
+        return coin_name.upper().strip()  # Робимо символ великими літерами і прибираємо пробіли
 
     def get_binance_data(self):
-        """Отримує дані про монету з Binance."""
+        """Отримує ціну монети з Binance API."""
+        url = f"{self.BASE_URL}?symbol={self.symbol}"
         try:
-            self.url = f"https://www.binance.com/en/price/{self.coin_name}"
-            self.fetch_page()
+            response = requests.get(url, timeout=5)
+            response.raise_for_status()  # Викине помилку, якщо статус-код не 200
 
-            coin_label = self.soup.select_one("h1.my-0.flex-grow.text-textPrimary")
-            if coin_label:
-                coin_label = coin_label.text.replace(" Price", "").strip()
-            else:
+            data = response.json()
+
+            # Перевіряємо, чи є ключ "price" у відповіді
+            if "price" not in data:
+                logging.error(f"⚠️ Binance API не повернув 'price' для {self.symbol}: {data}")
                 return None
 
-            price = self.soup.select_one("span.t-subtitle2.text-textPrimary")
-            if price:
-                price = round(float(price.text.split(" ")[3].replace("$", "")), 2)
-            else:
-                return None
-            return {"coinname": self.coin_name, "coin_label": coin_label, "last_value": price}
-        except Exception as e:
-            logging.info(e)
+            # Перетворюємо рядок у float і округлюємо до 2 знаків
+            price = round(float(data["price"]), 2)
+
+            return {
+                "coinname": self.coinname,
+                "coin_label": self.coinname,  # Binance API не повертає красиве ім'я
+                "last_value": price,
+            }
+        except requests.exceptions.RequestException as e:
+            logging.error(f"❌ Помилка запиту до Binance API: {e}")
             return None
-
