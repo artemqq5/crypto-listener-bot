@@ -28,7 +28,7 @@ async def name_or_url(message: Message, i18n: I18nContext, state: FSMContext):
         coin_label=coin_html['coin_label'], price=coin_html['last_value'])
     )
     await state.set_state(AddCoinState.Diference)
-    await message.answer(i18n.COIN.DIFFERENCE.SET(coin=coin_html['coin_label']))
+    await message.answer(i18n.COIN.DIFFERENCE.SET(coin=coin_html['coin_label'], price=coin_html['last_value']))
 
 
 @router.message(AddCoinState.Diference)
