@@ -1,33 +1,31 @@
-COIN-NEW-GET = Надішліть назву монети англійською або посилання на монету з платформи binance:
-COIN-NEW-FAIL = Алгоритм не зміг розпізнати монету, спробуйте ще раз:
-COIN-NEW-SUCCESS = Монета успішно додана до трек ліста
+COIN-NEW-GET = 💰 Please send the coin name from the Binance platform (e.g., Solana = SOL, Bitcoin = BTC):
+# 🔧 Set Coin difference
+# ⏳ Set Coin check time
+COIN-NEW-FIND_FAIL = ❌ The algorithm could not recognize the coin, please try again:
+COIN-NEW-FIND_SUCCESS = ✅ Found the coin <b>{$coin_label}</b> at a unit price of <b>{$price}$</b>
+COIN-NEW-FAIL = ❌ Failed to add coin <b>{$coin_label}</b> to the watchlist
+COIN-NEW-SUCCESS = 🎉 Coin <b>{$coin_label}</b> has been successfully added to the watchlist
 
-COIN-DELETE-CHOOSE = Оберіть монету для видалення зі списку
-COIN-DELETE-CONFIRM = Підтвердіть видалення <b>{$coin}</b>
-COIN-DELETE-FAIL = Не вийшло видалити монету
-COIN-DELETE-SUCCESS = <b>{$coin}</b> видалено успішно
+COIN-DELETE = 🗑 Delete coin
+COIN-DELETE-CONFIRM = ⚠️ Please confirm deletion of <b>{$coin}</b>
+COIN-DELETE-FAIL = ❌ Failed to delete coin <b>{$coin}</b>
+COIN-DELETE-SUCCESS = ✅ <b>{$coin}</b> has been successfully deleted
 
-COIN-DIFFERENCE-SET = Встановіть різницю ціни для <b>{$coin}</b> (від 0.0001 до 10000) або в процентному співвідношенні (1% - 100%) з знаком % в кінці:
-COIN-DIFFERENCE-INFO = Наприклад, якщо різниця = 3, коли остання записана ціна монети буде відрізнятися від поточної на 3 $, то користувачу буде надіслано push повідомлення.
-    Якщо ви вкажите 3%, то push буде надіслано, коли різниця між останньою ціною та поточної буде більше або дорівнюватиме 3% від останньої записаної ціни монети
-COIN-DIFFERENCE-VALUE_ERROR = Формат має бути числом від 0.0001 до 10000 або 1% - 100% з знаком % в кінці, спробуйте ще раз:
-COIN-DIFFERENCE-FAIL = Не вийшло встановити нову різницю для <b>{$coin}</b>
-COIN-DIFFERENCE-SUCCESS = Різницю в <b>{$difference} $ = {$percent}%</b> Встановлено для <b>{$coin}</b>
+COIN-DIFFERENCE = 📉 Change price difference
+COIN-DIFFERENCE-SET = 🔢 Set the price difference for <b>{$coin}</b> relative to the value of <b>{$price}$</b> (from 0.01 to 1000) or as a percentage (1% - 100%) with a '%' sign at the end:
+COIN-DIFFERENCE-VALUE_ERROR = ⚠️ The format must be a number from 0.01 to 1000 or 1% - 100% with a '%' sign; please try again:
+COIN-DIFFERENCE-FAIL = ❌ Failed to set a new difference for <b>{$coin}</b>
+COIN-DIFFERENCE-SUCCESS = ✅ The difference of <b>{$difference} $ = {$percent}%</b> relative to the value of <b>{$price}$</b> has been set for <b>{$coin}</b>
 
-COIN-CHECK_TIME-SET = Встановіть час перевірки ціни для <b>{$coin}</b> (від 1 до 180 хвилин):
-COIN-CHECK_TIME-INFO = Наприклад, якщо час перевірки 10s, то кожні 10 секунд буде здійснюватись запит на перевірку ціни монети
-COIN-CHECK_TIME-VALUE_ERROR = Формат має бути числом від 1 до 180, спробуйте ще раз:
-COIN-CHECK_TIME-FAIL = Не вийшло встановити час перевірки для <b>{$coin}</b>
-COIN-CHECK_TIME-SUCCESS = Час перевірки <b>{$check_time} хвилин</b> для <b>{$coin}</b> успішно встановленно
+COIN-CHECK_TIME-SET = ⏰ Set the price check interval (from 1 to 180 minutes):
+COIN-CHECK_TIME-VALUE_ERROR = ⚠️ The format must be a number from 1 to 180; please try again:
+COIN-CHECK_TIME-FAIL = ❌ Failed to set the price check interval
+COIN-CHECK_TIME-SUCCESS = ✅ Price check interval of <b>{$check_time} minutes</b> has been successfully set
 
-COINS = Ваші монети
-COIN-DETAIL = <b>{$coin_label}</b> #{$id}
+COIN-MY_COINS = 💎 Your coins
+COIN-NOT_EXIST = ⚠️ The coin no longer exists in your list
+COIN-DETAIL = 📊 <b>{$coin_label}</b> #{$id}
     ---------------------------------------
-    Ідетифікатор: <b>{$coinname}</b>
-    Остання ціна: <b>{$last_coin_value}</b>
-    Час перевірки: <b>{$check_time}</b>
-    Різниця ціни: <b>{$difference_value}</b>
-
-
-
-
+    🆔 coin: <b>{$coinname}</b>
+    💲 Last price: <b>{$last_value}$</b>
+    📉 Price difference: <b>{$difference} $</b>

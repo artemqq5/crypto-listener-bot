@@ -8,17 +8,12 @@ class GetDataFromBinance:
     BASE_URL = "https://api.binance.com/api/v3/ticker/price"
 
     def __init__(self, input_data):
-        """Приймає або URL, або символ монети (у будь-якому регістрі)."""
+        """Приймає символ монети (у будь-якому регістрі)."""
         self.coinname = self.extract_coin_name(input_data)
         self.symbol = f"{self.coinname.upper()}USDT"  # Binance використовує пари, напр. BTCUSDT
 
     def extract_coin_name(self, input_data):
-        """Якщо введено URL – витягує назву монети, якщо символ – повертає його."""
-        if input_data.startswith("http"):
-            parsed_url = urlparse(input_data)
-            coin_name = parsed_url.path.split("/")[-1]  # Отримуємо останню частину шляху
-        else:
-            coin_name = input_data  # Якщо не URL, просто використовуємо введене значення
+        coin_name = input_data  # Якщо не URL, просто використовуємо введене значення
         return coin_name.upper().strip()  # Робимо символ великими літерами і прибираємо пробіли
 
     def get_binance_data(self):

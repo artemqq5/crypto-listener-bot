@@ -16,10 +16,13 @@ router = Router()
 @router.callback_query(CoinDifference.filter())
 async def coin_change_difference_value_call(callback: CallbackQuery, state: FSMContext, i18n: I18nContext):
     data = await state.get_data()
-    coin_price = GetDataFromBinance(data['coin']['coinname']).get_binance_data()['last_value']
-    await state.update_data(coin_price=coin_price)
+    coin_binance = GetDataFromBinance(data['coin']['coinname']).get_binance_data()
+    if not coin_binance:
+        await callback.message.answer(i18n.COIN.NEW.FIND_FAIL())
+        return
+    await state.update_data(coin_price=coin_binance['last_value'])
     await callback.message.edit_text(i18n.COIN.DIFFERENCE.SET(
-        coin=data['coin']['coin_label'], price=coin_price),
+        coin=data['coin']['coin_label'], price=coin_binance['last_value']),
         reply_markup=kb_back_coins_nav
     )
     await state.set_state(ChangeDifferenceCoinState.Difference)

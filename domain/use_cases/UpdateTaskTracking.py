@@ -98,6 +98,9 @@ class UpdateTaskTracking:
             raise RuntimeError("🚨 UpdateTaskTracking не ініціалізовано! Викличте UpdateTaskTracking.initialize(bot, i18n) перед стартом.")
 
         coin_html = GetDataFromBinance(coin_db['coinname']).get_binance_data()
+        if not coin_html:
+            return
+
         new_price = coin_html['last_value']
         old_price = coin_db['last_value']
         difference = new_price - old_price
