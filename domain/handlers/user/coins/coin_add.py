@@ -9,14 +9,14 @@ from aiogram_i18n import I18nContext
 
 from data.repositories.CoinsRepository import CoinsRepository
 from domain.states.AddCoinState import AddCoinState
-from domain.use_cases.GetDataFromBrowser import GetDataFromBrowser
+from domain.use_cases.GetDataFromBinance import GetDataFromBinance
 
 router = Router()
 
 
 @router.message(AddCoinState.GetCoin)
 async def name_or_url(message: Message, i18n: I18nContext, state: FSMContext):
-    coin_html = GetDataFromBrowser(message.text).get_binance_data()
+    coin_html = GetDataFromBinance(message.text).get_binance_data()
 
     if not coin_html:
         await message.answer(i18n.COIN.NEW.FIND_FAIL())

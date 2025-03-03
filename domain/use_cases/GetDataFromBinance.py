@@ -1,6 +1,8 @@
 import logging
-import requests
 from urllib.parse import urlparse
+
+import requests
+
 
 class GetDataFromBinance:
     BASE_URL = "https://api.binance.com/api/v3/ticker/price"

@@ -7,7 +7,7 @@ from config import ADMINS
 from data.repositories.CoinsRepository import CoinsRepository
 from data.repositories.SettingValuesRepository import SettingValuesRepository
 from domain.notification.notification_change_price import changed_price_coin
-from domain.use_cases.GetDataFromBrowser import GetDataFromBrowser
+from domain.use_cases.GetDataFromBinance import GetDataFromBinance
 
 
 class UpdateTaskTracking:
@@ -97,7 +97,7 @@ class UpdateTaskTracking:
         if cls._bot is None or cls._i18n is None:
             raise RuntimeError("🚨 UpdateTaskTracking не ініціалізовано! Викличте UpdateTaskTracking.initialize(bot, i18n) перед стартом.")
 
-        coin_html = GetDataFromBrowser(coin_db['coinname']).get_binance_data()
+        coin_html = GetDataFromBinance(coin_db['coinname']).get_binance_data()
         new_price = coin_html['last_value']
         old_price = coin_db['last_value']
         difference = new_price - old_price

@@ -5,7 +5,7 @@ from aiogram_i18n import I18nContext
 
 from data.repositories.CoinsRepository import CoinsRepository
 from domain.states.ChangeDifferenceCoinState import ChangeDifferenceCoinState
-from domain.use_cases.GetDataFromBrowser import GetDataFromBrowser
+from domain.use_cases.GetDataFromBinance import GetDataFromBinance
 from domain.use_cases.UpdateTaskTracking import UpdateTaskTracking
 from presentation.kb.user_kb.coins_kb.kb_coin_back import kb_back_coins_nav
 from presentation.kb.user_kb.coins_kb.kb_coin_difference import CoinDifference
@@ -16,7 +16,7 @@ router = Router()
 @router.callback_query(CoinDifference.filter())
 async def coin_change_difference_value_call(callback: CallbackQuery, state: FSMContext, i18n: I18nContext):
     data = await state.get_data()
-    coin_price = GetDataFromBrowser(data['coin']['coinname']).get_binance_data()['last_value']
+    coin_price = GetDataFromBinance(data['coin']['coinname']).get_binance_data()['last_value']
     await state.update_data(coin_price=coin_price)
     await callback.message.edit_text(i18n.COIN.DIFFERENCE.SET(
         coin=data['coin']['coin_label'], price=coin_price),
