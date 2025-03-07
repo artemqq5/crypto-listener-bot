@@ -31,7 +31,7 @@ class GetDataFromBinance:
                 return None
 
             # Перетворюємо рядок у float і округлюємо до 2 знаків
-            price = round(float(data["price"]), 2)
+            price = round(float(data["price"]), 5)
 
             return {
                 "coinname": self.coinname,
