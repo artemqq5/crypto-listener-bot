@@ -77,7 +77,7 @@ async def coin_back_call(callback: CallbackQuery, state: FSMContext, i18n: I18nC
             coin_label=coin['coin_label'],
             id=coin['id'],
             coinname=coin['coinname'],
-            last_value=coin['last_value'],
+            last_value=round(float(coin['last_value']), 5),
             difference=coin['difference_value'],
         ),
         reply_markup=kb_coin_detail

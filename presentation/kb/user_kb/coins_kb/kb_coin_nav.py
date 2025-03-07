@@ -40,7 +40,7 @@ def kb_coins_managment(coins, current_page: int = 1):
     for i in range(start_index, end_index):
         inline_kb.append(
             [InlineKeyboardButton(
-                text=f"{coins[i]['coin_label']} {coins[i]['last_value']}$",
+                text=f"{coins[i]['coin_label']} {round(float(coins[i]['last_value']), 2)}$",
                 callback_data=CoinDetail(coinname=coins[i]['coinname']).pack()
             )]
         )
