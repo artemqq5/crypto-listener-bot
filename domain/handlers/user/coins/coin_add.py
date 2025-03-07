@@ -50,7 +50,7 @@ async def set_difference_value(message: Message, i18n: I18nContext, state: FSMCo
     else:
         try:
             difference = round(float(message.text), 2)  # Конвертуємо у float і округлюємо
-            if not (0.01 <= difference <= 1000):  # Перевірка діапазону
+            if not (0.00001 <= difference <= 1000):  # Перевірка діапазону
                 raise ValueError
 
             percent = round((difference / coin_price) * 100, 2)  # Відсоткове співвідношення
