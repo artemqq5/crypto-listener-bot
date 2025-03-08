@@ -20,7 +20,7 @@ async def set_check_time(message: Message, i18n: I18nContext, state: FSMContext)
         await message.answer(i18n.COIN.CHECK_TIME.VALUE_ERROR())
         return
 
-    if not await SettingValuesRepository().update_param('check_time', checktime):
+    if not await SettingValuesRepository().update_param("check_time", checktime):
         await message.answer(i18n.COIN.CHECK_TIME.FAIL())
         return
 

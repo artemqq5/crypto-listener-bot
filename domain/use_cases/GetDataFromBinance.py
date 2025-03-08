@@ -10,11 +10,15 @@ class GetDataFromBinance:
     def __init__(self, input_data):
         """Приймає символ монети (у будь-якому регістрі)."""
         self.coinname = self.extract_coin_name(input_data)
-        self.symbol = f"{self.coinname.upper()}USDT"  # Binance використовує пари, напр. BTCUSDT
+        self.symbol = (
+            f"{self.coinname.upper()}USDT"  # Binance використовує пари, напр. BTCUSDT
+        )
 
     def extract_coin_name(self, input_data):
         coin_name = input_data  # Якщо не URL, просто використовуємо введене значення
-        return coin_name.upper().strip()  # Робимо символ великими літерами і прибираємо пробіли
+        return (
+            coin_name.upper().strip()
+        )  # Робимо символ великими літерами і прибираємо пробіли
 
     def get_binance_data(self):
         """Отримує ціну монети з Binance API."""
@@ -27,7 +31,9 @@ class GetDataFromBinance:
 
             # Перевіряємо, чи є ключ "price" у відповіді
             if "price" not in data:
-                logging.error(f"⚠️ Binance API не повернув 'price' для {self.symbol}: {data}")
+                logging.error(
+                    f"⚠️ Binance API не повернув 'price' для {self.symbol}: {data}"
+                )
                 return None
 
             # Перетворюємо рядок у float і округлюємо до 2 знаків

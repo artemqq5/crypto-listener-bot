@@ -44,7 +44,11 @@ class CoinsRepository(BaseRepository[Coin]):
         try:
             async with self.async_session() as session:
                 async with session.begin():
-                    stmt = update(Coin).values(difference_value=difference).where(Coin.coinname == coinname)
+                    stmt = (
+                        update(Coin)
+                        .values(difference_value=difference)
+                        .where(Coin.coinname == coinname)
+                    )
                     result = await session.execute(stmt)
                     return result.rowcount
         except Exception as e:
@@ -55,7 +59,11 @@ class CoinsRepository(BaseRepository[Coin]):
         try:
             async with self.async_session() as session:
                 async with session.begin():
-                    stmt = update(Coin).values(last_value=price).where(Coin.coinname == coinname)
+                    stmt = (
+                        update(Coin)
+                        .values(last_value=price)
+                        .where(Coin.coinname == coinname)
+                    )
                     result = await session.execute(stmt)
                     return result.rowcount
         except Exception as e:

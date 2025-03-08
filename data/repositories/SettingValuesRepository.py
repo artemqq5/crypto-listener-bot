@@ -29,7 +29,11 @@ class SettingValuesRepository(BaseRepository[SettingValue]):
         try:
             async with self.async_session() as session:
                 async with session.begin():
-                    stmt = update(SettingValue).values(param_value=param_value).where(SettingValue.param == param)
+                    stmt = (
+                        update(SettingValue)
+                        .values(param_value=param_value)
+                        .where(SettingValue.param == param)
+                    )
                     result = await session.execute(stmt)
                     return result.rowcount
         except Exception as e:

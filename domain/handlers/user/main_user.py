@@ -20,8 +20,10 @@ router.include_routers(
 
 @router.message(Command("start"))
 async def start(message: Message, i18n: I18nContext, state: FSMContext):
-    check_time = await SettingValuesRepository().param('check_time')
-    await message.answer(i18n.GENERAL.START_MESSAGE(check_time=check_time['param_value']))
+    check_time = await SettingValuesRepository().param("check_time")
+    await message.answer(
+        i18n.GENERAL.START_MESSAGE(check_time=check_time["param_value"])
+    )
 
 
 @router.message(Command("new"))
@@ -33,7 +35,9 @@ async def new_coin(message: Message, i18n: I18nContext, state: FSMContext):
 @router.message(Command("coins"))
 async def coins(message: Message, i18n: I18nContext, state: FSMContext):
     coin_list = await CoinsRepository().coins()
-    await message.answer(i18n.COIN.MY_COINS(), reply_markup=kb_coins_managment(coin_list))
+    await message.answer(
+        i18n.COIN.MY_COINS(), reply_markup=kb_coins_managment(coin_list)
+    )
 
 
 @router.message(Command("checktime"))

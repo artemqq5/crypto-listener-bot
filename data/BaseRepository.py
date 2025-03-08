@@ -15,7 +15,6 @@ class BaseRepository(Generic[T]):
         self.engine = create_async_engine(DB_LINK_CONNECTION)
 
     async def create_tables(self):
-        """ Створює всі таблиці, якщо вони не існують """
+        """Створює всі таблиці, якщо вони не існують"""
         async with self.engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-

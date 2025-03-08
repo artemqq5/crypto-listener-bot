@@ -11,7 +11,12 @@ class BackCoinNavigation(CallbackData, prefix="BackCoinNavigation"):
     pass
 
 
-kb_back_coins_nav = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text=L.GENERAL.BACK(), callback_data=BackCoinsNavigation().pack())]
-])
-
+kb_back_coins_nav = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=L.GENERAL.BACK(), callback_data=BackCoinsNavigation().pack()
+            )
+        ]
+    ]
+)

@@ -9,10 +9,10 @@ from data.repositories.UserRepository import UserRepository
 
 class AdminModeMiddleware(BaseMiddleware):
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
-            data: Dict[str, Any]
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any],
     ) -> Any:
         if not isinstance(event, (types.Message, types.CallbackQuery)):
             return

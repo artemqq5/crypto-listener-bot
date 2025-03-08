@@ -17,7 +17,12 @@ class UserRepository(BaseRepository[User]):
         try:
             async with self.async_session() as session:
                 async with session.begin():
-                    stmt = insert(User).values(user_id=user_id, username=username, firstname=firstname, lang=lang)
+                    stmt = insert(User).values(
+                        user_id=user_id,
+                        username=username,
+                        firstname=firstname,
+                        lang=lang,
+                    )
                     result = await session.execute(stmt)
                     return result.rowcount
         except Exception as e:

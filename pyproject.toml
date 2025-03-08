@@ -1,18 +1,16 @@
 [tool.black]
-exclude = '''
-/(
-    \.git
+target-version = ["py311",]
+force-exclude = '''
+(
+  config\.py
+  | alembic\.ini
+  | \.git
   | \.venv
   | build
   | dist
   | venv
   | alembic
-  | alembic.ini
-  | .gitignore
-  | .flake8
-  | migrations
-  | old_scripts
-  | config\.py
-  | tests_data
-)/
+  | \.gitignore
+  | \.flake8
+)
 '''

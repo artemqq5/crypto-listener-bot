@@ -4,9 +4,22 @@ from aiogram.types import CallbackQuery
 from aiogram_i18n import I18nContext
 
 from data.repositories.CoinsRepository import CoinsRepository
-from domain.handlers.user.coins import coin_add, coin_difference_value, coin_delete, coin_check_time
-from presentation.kb.user_kb.coins_kb.kb_coin_back import BackCoinsNavigation, BackCoinNavigation
-from presentation.kb.user_kb.coins_kb.kb_coin_nav import CoinsNavigation, kb_coins_managment, CoinDetail, kb_coin_detail
+from domain.handlers.user.coins import (
+    coin_add,
+    coin_difference_value,
+    coin_delete,
+    coin_check_time,
+)
+from presentation.kb.user_kb.coins_kb.kb_coin_back import (
+    BackCoinsNavigation,
+    BackCoinNavigation,
+)
+from presentation.kb.user_kb.coins_kb.kb_coin_nav import (
+    CoinsNavigation,
+    kb_coins_managment,
+    CoinDetail,
+    kb_coin_detail,
+)
 
 router = Router()
 
@@ -14,7 +27,7 @@ router.include_routers(
     coin_add.router,
     coin_difference_value.router,
     coin_check_time.router,
-    coin_delete.router
+    coin_delete.router,
 )
 
 
@@ -27,12 +40,14 @@ async def coins_nav_call(callback: CallbackQuery, state: FSMContext, i18n: I18nC
 
     await callback.message.edit_text(
         text=i18n.COIN.MY_COINS(),
-        reply_markup=kb_coins_managment(coin_list, current_page=page)
+        reply_markup=kb_coins_managment(coin_list, current_page=page),
     )
 
 
 @router.callback_query(CoinDetail.filter())
-async def coin_detail_call(callback: CallbackQuery, state: FSMContext, i18n: I18nContext):
+async def coin_detail_call(
+    callback: CallbackQuery, state: FSMContext, i18n: I18nContext
+):
     coinname = callback.data.split(":")[1]
     coin = await CoinsRepository().coin(coinname)
 
@@ -40,31 +55,35 @@ async def coin_detail_call(callback: CallbackQuery, state: FSMContext, i18n: I18
 
     await callback.message.edit_text(
         i18n.COIN.DETAIL(
-            coin_label=coin['coin_label'],
-            id=coin['id'],
-            coinname=coin['coinname'],
-            last_value=coin['last_value'],
-            difference=coin['difference_value'],
+            coin_label=coin["coin_label"],
+            id=coin["id"],
+            coinname=coin["coinname"],
+            last_value=coin["last_value"],
+            difference=coin["difference_value"],
         ),
-        reply_markup=kb_coin_detail
+        reply_markup=kb_coin_detail,
     )
 
 
 @router.callback_query(BackCoinsNavigation.filter())
-async def coins_back_call(callback: CallbackQuery, state: FSMContext, i18n: I18nContext):
+async def coins_back_call(
+    callback: CallbackQuery, state: FSMContext, i18n: I18nContext
+):
     data = await state.get_data()
     coin_list = await CoinsRepository().coins()
 
     await callback.message.edit_text(
         text=i18n.COIN.MY_COINS(),
-        reply_markup=kb_coins_managment(coin_list, current_page=data.get('last_page_coins', 1))
+        reply_markup=kb_coins_managment(
+            coin_list, current_page=data.get("last_page_coins", 1)
+        ),
     )
 
 
 @router.callback_query(BackCoinNavigation.filter())
 async def coin_back_call(callback: CallbackQuery, state: FSMContext, i18n: I18nContext):
     data = await state.get_data()
-    coin = await CoinsRepository().coin(data.get('coin', {}).get('coinname'))
+    coin = await CoinsRepository().coin(data.get("coin", {}).get("coinname"))
 
     if not coin:
         await callback.answer(i18n.COIN.NOT_EXIST())
@@ -74,11 +93,11 @@ async def coin_back_call(callback: CallbackQuery, state: FSMContext, i18n: I18nC
 
     await callback.message.edit_text(
         i18n.COIN.DETAIL(
-            coin_label=coin['coin_label'],
-            id=coin['id'],
-            coinname=coin['coinname'],
-            last_value=round(float(coin['last_value']), 5),
-            difference=coin['difference_value'],
+            coin_label=coin["coin_label"],
+            id=coin["id"],
+            coinname=coin["coinname"],
+            last_value=round(float(coin["last_value"]), 5),
+            difference=coin["difference_value"],
         ),
-        reply_markup=kb_coin_detail
+        reply_markup=kb_coin_detail,
     )

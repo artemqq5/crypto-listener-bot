@@ -14,16 +14,20 @@ router = Router()
 
 
 @router.callback_query(CoinDifference.filter())
-async def coin_change_difference_value_call(callback: CallbackQuery, state: FSMContext, i18n: I18nContext):
+async def coin_change_difference_value_call(
+    callback: CallbackQuery, state: FSMContext, i18n: I18nContext
+):
     data = await state.get_data()
-    coin_binance = GetDataFromBinance(data['coin']['coinname']).get_binance_data()
+    coin_binance = GetDataFromBinance(data["coin"]["coinname"]).get_binance_data()
     if not coin_binance:
         await callback.message.answer(i18n.COIN.NEW.FIND_FAIL())
         return
-    await state.update_data(coin_price=coin_binance['last_value'])
-    await callback.message.edit_text(i18n.COIN.DIFFERENCE.SET(
-        coin=data['coin']['coin_label'], price=coin_binance['last_value']),
-        reply_markup=kb_back_coins_nav
+    await state.update_data(coin_price=coin_binance["last_value"])
+    await callback.message.edit_text(
+        i18n.COIN.DIFFERENCE.SET(
+            coin=data["coin"]["coin_label"], price=coin_binance["last_value"]
+        ),
+        reply_markup=kb_back_coins_nav,
     )
     await state.set_state(ChangeDifferenceCoinState.Difference)
 
@@ -31,11 +35,13 @@ async def coin_change_difference_value_call(callback: CallbackQuery, state: FSMC
 @router.message(ChangeDifferenceCoinState.Difference)
 async def set_difference_value(message: Message, i18n: I18nContext, state: FSMContext):
     data = await state.get_data()
-    coin_price = data['coin_price']
+    coin_price = data["coin_price"]
 
     if "%" in message.text:
         try:
-            difference = int(message.text.rstrip("%"))  # Видаляємо % і конвертуємо у число
+            difference = int(
+                message.text.rstrip("%")
+            )  # Видаляємо % і конвертуємо у число
             if not (1 <= difference <= 100):  # Перевірка діапазону
                 raise ValueError
 
@@ -46,25 +52,36 @@ async def set_difference_value(message: Message, i18n: I18nContext, state: FSMCo
             return
     else:
         try:
-            difference = round(float(message.text), 2)  # Конвертуємо у float і округлюємо
+            difference = round(
+                float(message.text), 2
+            )  # Конвертуємо у float і округлюємо
             if not (0.00001 <= difference <= 1000):  # Перевірка діапазону
                 raise ValueError
 
-            percent = round((difference / coin_price) * 100, 2)  # Відсоткове співвідношення
+            percent = round(
+                (difference / coin_price) * 100, 2
+            )  # Відсоткове співвідношення
         except ValueError:
             await message.answer(i18n.COIN.DIFFERENCE.VALUE_ERROR())
             return
 
-    if not await CoinsRepository().update_difference(data['coin']['coinname'], difference):
-        await message.answer(i18n.COIN.DIFFERENCE.FAIL(
-            coin=data['coin']['coin_label']),
-            reply_markup=kb_back_coins_nav
+    if not await CoinsRepository().update_difference(
+        data["coin"]["coinname"], difference
+    ):
+        await message.answer(
+            i18n.COIN.DIFFERENCE.FAIL(coin=data["coin"]["coin_label"]),
+            reply_markup=kb_back_coins_nav,
         )
         return
 
-    await message.answer(i18n.COIN.DIFFERENCE.SUCCESS(
-        difference=difference, percent=percent, price=coin_price, coin=data['coin']['coin_label']),
-        reply_markup=kb_back_coins_nav
+    await message.answer(
+        i18n.COIN.DIFFERENCE.SUCCESS(
+            difference=difference,
+            percent=percent,
+            price=coin_price,
+            coin=data["coin"]["coin_label"],
+        ),
+        reply_markup=kb_back_coins_nav,
     )
 
     await UpdateTaskTracking.reset_timers()

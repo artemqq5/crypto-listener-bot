@@ -21,9 +21,7 @@ from domain.use_cases.UpdateTaskTracking import UpdateTaskTracking
 storage = MemoryStorage()
 dp = Dispatcher(storage=storage)
 
-dp.include_routers(
-    main_user.router
-)
+dp.include_routers(main_user.router)
 
 default_properties = DefaultBotProperties(parse_mode=ParseMode.HTML)
 bot = Bot(token=config.BOT_TOKEN, default=default_properties, timeout=60)
@@ -39,7 +37,9 @@ async def on_startup():
 
     # webhook_info = await bot.get_webhook_info()
     # if webhook_info.url != config.WEBHOOK_BASE_URL + config.WEBHOOK_PATH:
-    await bot.set_webhook(url=config.WEBHOOK_BASE_URL + config.WEBHOOK_PATH, drop_pending_updates=True)
+    await bot.set_webhook(
+        url=config.WEBHOOK_BASE_URL + config.WEBHOOK_PATH, drop_pending_updates=True
+    )
     asyncio.create_task(UpdateTaskTracking.start_all_checks())
 
 
@@ -61,9 +61,11 @@ async def main():
 
     # localization middleware
     i18n_middleware = I18nMiddleware(
-        core=FluentRuntimeCore(path="presentation/locales"),  # Використовуємо абсолютний шлях
-        default_locale='en',
-        manager=LocaleManager()
+        core=FluentRuntimeCore(
+            path="presentation/locales"
+        ),  # Використовуємо абсолютний шлях
+        default_locale="en",
+        manager=LocaleManager(),
     )
 
     i18n_middleware.setup(dp)
@@ -72,9 +74,12 @@ async def main():
     with i18n_middleware.use_context(locale="en") as i18n_context:
         UpdateTaskTracking.initialize(bot=bot, i18n=i18n_context)
 
-    dp.message.outer_middleware(IsUserRegisteredMiddleware())  # check if user not registered
-    dp.callback_query.outer_middleware(IsUserRegisteredMiddleware())  # check if user not registered
+    dp.message.outer_middleware(
+        IsUserRegisteredMiddleware()
+    )  # check if user not registered
+    dp.callback_query.outer_middleware(
+        IsUserRegisteredMiddleware()
+    )  # check if user not registered
 
     dp.message.outer_middleware(AdminModeMiddleware())
     dp.callback_query.outer_middleware(AdminModeMiddleware())
-

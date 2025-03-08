@@ -1,3 +1,5 @@
 [flake8]
 extend-ignore = E501
 exclude = .git,__pycache__,config.py,old,build,dist,alembic,venv,alembic.ini,.gitignore,requirements.txt
+max-complexity = 10
+max-line-length = 120

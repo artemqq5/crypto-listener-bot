@@ -33,7 +33,9 @@ class UpdateTaskTracking:
         if not check_time or "param_value" not in check_time:
             raise ValueError("⛔ Час перевірки відсутній у БД!")
 
-        cls._check_time = int(check_time["param_value"]) * 60  # Переводимо хвилини в секунди
+        cls._check_time = (
+            int(check_time["param_value"]) * 60
+        )  # Переводимо хвилини в секунди
         return cls._check_time
 
     @classmethod
@@ -42,7 +44,9 @@ class UpdateTaskTracking:
         try:
             new_check_time = await cls.get_check_time_from_db()
             if cls._check_time != new_check_time:
-                logging.info(f"🔄 Оновлення періоду перевірки: {cls._check_time // 60} → {new_check_time // 60} хв")
+                logging.info(
+                    f"🔄 Оновлення періоду перевірки: {cls._check_time // 60} → {new_check_time // 60} хв"
+                )
                 cls._check_time = new_check_time
                 cls._task_event.set()  # Перезапускає всі таймери з новим періодом
         except ValueError as e:
@@ -53,7 +57,9 @@ class UpdateTaskTracking:
         """Перевіряє ціну монети, але тепер НЕ викликає себе знову, а заново запускає весь цикл."""
         await cls.update_check_time()  # Перевіряємо чи змінився інтервал у БД
 
-        logging.info(f"🔍 Починаємо перевірку {coin['coinname']} (інтервал: {cls._check_time // 60} хв)...")
+        logging.info(
+            f"🔍 Починаємо перевірку {coin['coinname']} (інтервал: {cls._check_time // 60} хв)..."
+        )
 
         await cls.check_coin_value(coin)
 
@@ -71,8 +77,12 @@ class UpdateTaskTracking:
         for coin in coins:
             coin_name = coin["coinname"]
 
-            logging.info(f"🚀 Запускаємо перевірку для {coin_name} (кожні {cls._check_time // 60} хв)...")
-            await cls.check_coin(coin)  # Тепер запускаємо перевірку без створення зайвих тасків
+            logging.info(
+                f"🚀 Запускаємо перевірку для {coin_name} (кожні {cls._check_time // 60} хв)..."
+            )
+            await cls.check_coin(
+                coin
+            )  # Тепер запускаємо перевірку без створення зайвих тасків
 
         # Чекаємо або таймер, або команду `reset_timers()`
         try:
@@ -95,34 +105,47 @@ class UpdateTaskTracking:
     async def check_coin_value(cls, coin_db: dict):
         """Перевіряє поточну ціну монети та відправляє сповіщення при зміні."""
         if cls._bot is None or cls._i18n is None:
-            raise RuntimeError("🚨 UpdateTaskTracking не ініціалізовано! Викличте UpdateTaskTracking.initialize(bot, i18n) перед стартом.")
+            raise RuntimeError(
+                "🚨 UpdateTaskTracking не ініціалізовано! Викличте UpdateTaskTracking.initialize(bot, i18n) перед стартом."
+            )
 
-        coin_html = GetDataFromBinance(coin_db['coinname']).get_binance_data()
+        coin_html = GetDataFromBinance(coin_db["coinname"]).get_binance_data()
         if not coin_html:
             return
 
-        new_price = coin_html['last_value']
-        old_price = coin_db['last_value']
+        new_price = coin_html["last_value"]
+        old_price = coin_db["last_value"]
         difference = new_price - old_price
 
         current_time = asyncio.get_event_loop().time()
         last_notification_time = cls._last_notifications.get(coin_db["coinname"], 0)
         time_since_last_notification = current_time - last_notification_time
 
-        logging.info(f"📊 {coin_db['coinname']} -> Стара ціна: {old_price}, Нова ціна: {new_price}, Різниця: {difference}")
+        logging.info(
+            f"📊 {coin_db['coinname']} -> Стара ціна: {old_price}, Нова ціна: {new_price}, Різниця: {difference}"
+        )
 
-        if abs(difference) > coin_db['difference_value']:
+        if abs(difference) > coin_db["difference_value"]:
             if time_since_last_notification >= cls._check_time:
-                logging.info(f"📢 Сповіщення для {coin_db['coinname']} буде відправлено!")
+                logging.info(
+                    f"📢 Сповіщення для {coin_db['coinname']} буде відправлено!"
+                )
 
-                await CoinsRepository().update_price(coin_db['coinname'], new_price)
+                await CoinsRepository().update_price(coin_db["coinname"], new_price)
 
                 cls._last_notifications[coin_db["coinname"]] = current_time
 
                 await changed_price_coin(
-                    coin_label=coin_db['coin_label'], difference=difference,
-                    new_price=new_price, old_price=old_price,
-                    check_time=cls._check_time / 60, user_id=ADMINS[0], bot=cls._bot, i18n=cls._i18n
+                    coin_label=coin_db["coin_label"],
+                    difference=difference,
+                    new_price=new_price,
+                    old_price=old_price,
+                    check_time=cls._check_time / 60,
+                    user_id=ADMINS[0],
+                    bot=cls._bot,
+                    i18n=cls._i18n,
                 )
             else:
-                logging.info(f"⏳ Пропускаємо сповіщення для {coin_db['coinname']} – ще не минув інтервал часу.")
+                logging.info(
+                    f"⏳ Пропускаємо сповіщення для {coin_db['coinname']} – ще не минув інтервал часу."
+                )
