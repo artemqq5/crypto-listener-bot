@@ -1,0 +1,18 @@
+[tool.black]
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+  | venv
+  | alembic
+  | alembic.ini
+  | .gitignore
+  | .flake8
+  | migrations
+  | old_scripts
+  | config\.py
+  | tests_data
+)/
+'''
