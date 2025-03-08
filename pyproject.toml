@@ -14,3 +14,6 @@ force-exclude = '''
   | \.flake8
 )
 '''
+
+[tool.pylint]
+ignore = ['config.py', 'alembic', 'venv']
