@@ -1,4 +1,5 @@
-from sqlalchemy import String, BigInteger, DateTime, func, UniqueConstraint, Numeric
+from sqlalchemy import (BigInteger, DateTime, Numeric, String,
+                        UniqueConstraint, func)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 

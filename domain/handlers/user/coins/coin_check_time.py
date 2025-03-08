@@ -16,7 +16,7 @@ async def set_check_time(message: Message, i18n: I18nContext, state: FSMContext)
         checktime = int(message.text)
         if checktime > 180 or checktime < 1:
             raise ValueError
-    except ValueError as e:
+    except ValueError:
         await message.answer(i18n.COIN.CHECK_TIME.VALUE_ERROR())
         return
 

@@ -1,6 +1,6 @@
 import logging
 
-from sqlalchemy import insert, select, delete, update
+from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 

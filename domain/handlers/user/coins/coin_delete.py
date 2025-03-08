@@ -7,10 +7,7 @@ from data.repositories.CoinsRepository import CoinsRepository
 from domain.states.DeleteCoinState import DeleteCoinState
 from presentation.kb.user_kb.coins_kb.kb_coin_back import kb_back_coins_nav
 from presentation.kb.user_kb.coins_kb.kb_coin_delete import (
-    DeleteCoin,
-    ConfirmationDeleteCoin,
-    kb_confirmation_delete_coin,
-)
+    ConfirmationDeleteCoin, DeleteCoin, kb_confirmation_delete_coin)
 
 router = Router()
 

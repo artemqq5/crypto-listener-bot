@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 from aiogram_i18n import L
-from aiogram_i18n.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram_i18n.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from presentation.kb.user_kb.coins_kb.kb_coin_back import BackCoinsNavigation
 

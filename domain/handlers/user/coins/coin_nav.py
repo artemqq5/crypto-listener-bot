@@ -4,22 +4,14 @@ from aiogram.types import CallbackQuery
 from aiogram_i18n import I18nContext
 
 from data.repositories.CoinsRepository import CoinsRepository
-from domain.handlers.user.coins import (
-    coin_add,
-    coin_difference_value,
-    coin_delete,
-    coin_check_time,
-)
-from presentation.kb.user_kb.coins_kb.kb_coin_back import (
-    BackCoinsNavigation,
-    BackCoinNavigation,
-)
-from presentation.kb.user_kb.coins_kb.kb_coin_nav import (
-    CoinsNavigation,
-    kb_coins_managment,
-    CoinDetail,
-    kb_coin_detail,
-)
+from domain.handlers.user.coins import (coin_add, coin_check_time, coin_delete,
+                                        coin_difference_value)
+from presentation.kb.user_kb.coins_kb.kb_coin_back import (BackCoinNavigation,
+                                                           BackCoinsNavigation)
+from presentation.kb.user_kb.coins_kb.kb_coin_nav import (CoinDetail,
+                                                          CoinsNavigation,
+                                                          kb_coin_detail,
+                                                          kb_coins_managment)
 
 router = Router()
 

@@ -1,10 +1,8 @@
-from typing import TypeVar, Generic
-
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import Session, sessionmaker
+from typing import Generic, TypeVar
 
 from config import DB_LINK_CONNECTION
+from sqlalchemy.ext.asyncio import create_async_engine
+
 from data.sqlmodels import Base
 
 T = TypeVar("T", bound=Base)

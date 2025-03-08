@@ -1,10 +1,8 @@
-from _decimal import Decimal
 
-from unicodedata import decimal
 
 from aiogram import Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message
 from aiogram_i18n import I18nContext
 
 from data.repositories.CoinsRepository import CoinsRepository

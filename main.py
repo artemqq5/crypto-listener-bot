@@ -1,17 +1,16 @@
 import asyncio
 import logging
 
-from aiogram import Dispatcher, Bot
+import config
+from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import Update, CallbackQuery
-from aiogram_i18n import I18nMiddleware, I18nContext
+from aiogram.types import Update
+from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from fastapi import FastAPI
 
-import config
 from domain.handlers.user import main_user
 from domain.middleware.AdminModeMiddleware import AdminModeMiddleware
 from domain.middleware.IsRegisteredMiddleware import IsUserRegisteredMiddleware

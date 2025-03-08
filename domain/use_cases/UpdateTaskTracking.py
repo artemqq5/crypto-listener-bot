@@ -1,9 +1,9 @@
 import asyncio
 import logging
-from aiogram import Bot
-from aiogram_i18n import I18nContext
 
+from aiogram import Bot
 from config import ADMINS
+
 from data.repositories.CoinsRepository import CoinsRepository
 from data.repositories.SettingValuesRepository import SettingValuesRepository
 from domain.notification.notification_change_price import changed_price_coin

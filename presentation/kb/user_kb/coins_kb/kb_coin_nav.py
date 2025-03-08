@@ -5,7 +5,6 @@ from aiogram_i18n import L
 from aiogram_i18n.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from presentation.kb.user_kb.coins_kb.kb_coin_back import BackCoinsNavigation
-from presentation.kb.user_kb.coins_kb.kb_coin_checktime import CoinCheckTime
 from presentation.kb.user_kb.coins_kb.kb_coin_delete import DeleteCoin
 from presentation.kb.user_kb.coins_kb.kb_coin_difference import CoinDifference
 

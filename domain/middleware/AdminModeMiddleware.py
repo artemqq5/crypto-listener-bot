@@ -1,10 +1,8 @@
-from typing import Callable, Any, Dict, Awaitable
+from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware, types
 from aiogram.types import TelegramObject
-
 from config import ADMINS
-from data.repositories.UserRepository import UserRepository
 
 
 class AdminModeMiddleware(BaseMiddleware):
