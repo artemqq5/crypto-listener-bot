@@ -41,3 +41,7 @@ jobs:
 
       - name: Run pylint
         run: pylint ../crypto-listener-bot
+
+      - name: Run Bandit
+        run: bandit -r . --exclude .\venv
+
