@@ -15,6 +15,10 @@ force-exclude = '''
 )
 '''
 
+[tool.isort]
+profile = "black"
+line_length = 88
+
 [tool.pylint]
 ignore = ['config.py', 'alembic', 'venv']
 disable = ["C", "R", "W"]
