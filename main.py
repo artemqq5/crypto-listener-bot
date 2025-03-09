@@ -1,7 +1,6 @@
 import asyncio
 import logging
 
-import config
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -11,6 +10,7 @@ from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from fastapi import FastAPI
 
+import config
 from domain.handlers.user import main_user
 from domain.middleware.AdminModeMiddleware import AdminModeMiddleware
 from domain.middleware.IsRegisteredMiddleware import IsUserRegisteredMiddleware

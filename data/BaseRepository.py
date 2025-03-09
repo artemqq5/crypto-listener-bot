@@ -1,8 +1,8 @@
 from typing import Generic, TypeVar
 
-from config import DB_LINK_CONNECTION
 from sqlalchemy.ext.asyncio import create_async_engine
 
+from config import DB_LINK_CONNECTION
 from data.sqlmodels import Base
 
 T = TypeVar("T", bound=Base)
