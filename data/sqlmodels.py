@@ -1,5 +1,4 @@
-from sqlalchemy import (BigInteger, DateTime, Numeric, String,
-                        UniqueConstraint, func)
+from sqlalchemy import BigInteger, DateTime, Numeric, String, UniqueConstraint, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -15,7 +14,9 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(255), nullable=True)
     firstname: Mapped[str] = mapped_column(String(255), nullable=True)
     lang: Mapped[str] = mapped_column(String(2), nullable=True)
-    joined: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # pylint: disable=not-callable
+    joined: Mapped[DateTime] = mapped_column(
+        DateTime, server_default=func.now()  # pylint: disable=not-callable
+    )
 
     __table_args__ = (UniqueConstraint("user_id", name="uq_user"),)
 
