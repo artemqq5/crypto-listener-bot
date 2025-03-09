@@ -26,7 +26,7 @@ jobs:
 
       - name: Run autoflake (check only)
         run: |
-          autoflake --check --remove-all-unused-imports --remove-unused-variables --recursive .
+          autoflake --check --remove-all-unused-imports --remove-unused-variables --recursive . --exclude=venv
 
       - name: Run isort (check only)
         run: |
