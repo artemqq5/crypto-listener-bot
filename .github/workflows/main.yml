@@ -24,17 +24,17 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run autoflake
+      - name: Run autoflake (check only)
         run: |
-          autoflake --remove-all-unused-imports --remove-unused-variables --in-place --recursive .
+          autoflake --check --remove-all-unused-imports --remove-unused-variables --recursive .
 
-      - name: Run isort
+      - name: Run isort (check only)
         run: |
-          isort .
+          isort . --check --diff
 
-      - name: Run black
+      - name: Run black (check only)
         run: |
-          black .
+          black --check --diff .
 
       - name: Run flake8
         run: flake8 .
