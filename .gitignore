@@ -1,6 +1,6 @@
-config.py
 .idea/
 __pycache__/
 venv/
 alembic/*
 alembic.ini
+.env
